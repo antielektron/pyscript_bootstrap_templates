@@ -43,7 +43,7 @@ def create_project(root_folder: pathlib.Path,
 
 
         <!-- Bootstrap CSS -->
-        <link href="./resources/bootstrap.css">
+        <link href="./resources/bootstrap.css" rel="stylesheet">
 
         <link rel="stylesheet" href="./resources/pyscript.css" />
         <script defer src="./resources/pyscript.js"></script>
