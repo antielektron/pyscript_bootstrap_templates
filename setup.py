@@ -22,7 +22,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 setup(
 
     name="pyscript-bootstrap-templates", 
-    version=get_version("pyscript-bootstrap-templates/__init__.py"),
+    version=get_version("pyscript_bootstrap_templates/__init__.py"),
     description="templates and basic python/pyscript wrappers for bootstrap 5",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -35,8 +35,7 @@ setup(
 
     keywords="sample, setuptools, development",
 
-    package_dir={"": "pyscript-bootstrap-templates"},
-    packages=find_packages(where="pyscript-bootstrap-templates"),
+    packages=["pyscript_bootstrap_templates"],
 
 
     python_requires=">=3.7, <4",

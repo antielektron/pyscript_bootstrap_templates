@@ -74,7 +74,7 @@ def main():
     argument_parser.add_argument(
         "title", type=str, help="the title of the new project")
     argument_parser.add_argument(
-        "packages", type=str, nargs="+", help="the packages to include in the new project")
+        "packages", type=str, nargs="*", help="the packages to include in the new project")
     argument_parser.add_argument("--paths", type=str, nargs="+",
                                  help="additional local python files to include in the new project")
     argument_parser.add_argument("--pyscript_css_url", type=str,
