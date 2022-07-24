@@ -1,9 +1,9 @@
 
 from typing import Dict, List, Union, Callable
 
-import HTML
+from . import HTML
 
-from bootstrap_HTML_container import *
+from .bootstrap_HTML_container import *
 from js import bootstrap  # type: ignore
 
 

@@ -1,5 +1,5 @@
-import HTML
-import bootstrap_HTML as bHTML
+from . import HTML
+from . import bootstrap_HTML as bHTML
 from js import document # type: ignore
 
 class PyScriptBootstrapApp(object):

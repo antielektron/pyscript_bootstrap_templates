@@ -1,7 +1,7 @@
 import datetime as dt
 import uuid
 
-from bootstrap_HTML import *
+from .bootstrap_HTML import *
 from js import document, FileReader, btoa   # type: ignore
 from pyodide import create_proxy  # type: ignore
 import io

@@ -4,7 +4,7 @@
 
 from typing import Union
 from enum import Enum
-import HTML
+from . import HTML
 
 # Base Container Class: -------------------------------------------------------
 

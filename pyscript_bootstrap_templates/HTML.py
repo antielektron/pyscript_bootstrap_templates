@@ -4,7 +4,6 @@ import uuid
 from js import document, CanvasRenderingContext2D  # type: ignore
 from pyodide import create_proxy  # type: ignore
 from parse import *
-import numpy as np
 import base64
 from PIL import Image as PILImage
 from io import BytesIO, StringIO
@@ -1113,7 +1112,7 @@ class IFrame(Element):
 class Image(Element):
 
     @classmethod
-    def from_numpy_array(cls, m:np.ndarray, format="PNG", **kwargs):
+    def from_numpy_array(cls, m:"np.ndarray", format="PNG", **kwargs):
         if format.upper() == "JPG":
             format = "JPEG"
 
