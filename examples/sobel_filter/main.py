@@ -20,10 +20,15 @@ def sobel_image(img):
     return ((255 * img_sobel) / img_sobel.max()).astype(np.uint8)
 
 
-app = bootstrap_templates.PyScriptBootstrapDashboard(parent_element="pyscript_app", brand_name="Image Filter Example")
+app = bootstrap_templates.PyScriptBootstrapDashboard(parent_element="pyscript_app", brand_name="Sobel Filter Example")
+
+HTML.H3("upload an image:", parent=app.sidebar)
+HTML.H3("filtered image:", parent=app.main_area)
+
+
 
 image_input = bInputs.InputFile(label_text="choose image file", parent=app.sidebar)
-image_input.set_attribute("accept", "image/*")
+image_input._input.set_attribute("accept", "image/*") # TODO: write wrapper for this
 
 def on_image_change(f, *args):
     print("image changed")
