@@ -2,7 +2,7 @@ import datetime as dt
 import uuid
 
 from .bootstrap_HTML import *
-from js import document, FileReader, btoa   # type: ignore
+from js import document, FileReader, btoa, Uint8Array   # type: ignore
 from pyodide import create_proxy  # type: ignore
 import io
 import base64
@@ -323,38 +323,38 @@ class InputFile(InputElement):
 
 
     def _load_file(self, *args):
-        def read_file(event, name):
-            buffer = io.BytesIO()
-            
-            # FIXME: way too much decoding and encoding between formats here
-            # but bytearray conversation between js and python drove me crazy!!!
+        async def read_file(event, f):
+                        
+            # FIXME: i think i am doing things too complicated here,
+            # but my understanding of loading raw bytes from file
+            # inputs in javascript (and their pyodide interacions) is very much limited
 
+            name = f.name
 
-            f = btoa(event.target.result)
-            buffer.write(base64.decodebytes(bytes(f, "utf-8")))
-            print(btoa(event.target.result))
+            print("loaded ", name)
+
+            uint8_array = Uint8Array.new(await f.arrayBuffer())
+            buffer = io.BytesIO(bytearray(uint8_array))
             self._files[name] = buffer
             buffer.seek(0)
-            buffer.name = name # not standardized, but works here
+            buffer.name = name # not standardized, but works here # TODO: create base class for that purpose
             if self._on_file_change is not None:
                 self._on_file_change(buffer)
 
-        fileList = self._input.element.files
+        file_list = self._input.element.files.to_py()
 
         self._files = {}
     
-        for f in fileList:
+        for f in file_list:
             # reader is a pyodide.JsProxy
             reader = FileReader.new()
     
             # Create a Python proxy for the callback function
-            onload_event = create_proxy(lambda event, name=f.name: read_file(event, name))
+            onload_event = create_proxy(lambda event, f=f: read_file(event, f))
     
             reader.onload = onload_event
     
             reader.readAsBinaryString(f)
-        
-        
     
         return
 

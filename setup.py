@@ -47,7 +47,7 @@ setup(
 
     entry_points={
         "console_scripts": [
-            "create_pyscript_bootstrap_app=pyscript_bootstrap_templates.create:main",
+            "pyscript_bootstrap_app=pyscript_bootstrap_templates.cli_interface:main",
         ],
     },
 

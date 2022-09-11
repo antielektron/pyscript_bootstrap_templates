@@ -1,5 +1,3 @@
-
-
 from pyscript_bootstrap_templates import bootstrap_templates
 from pyscript_bootstrap_templates import bootstrap_HTML as bHTML
 from pyscript_bootstrap_templates import bootstrap_inputs as bInputs
@@ -20,15 +18,10 @@ def sobel_image(img):
     return ((255 * img_sobel) / img_sobel.max()).astype(np.uint8)
 
 
-app = bootstrap_templates.PyScriptBootstrapDashboard(parent_element="pyscript_app", brand_name="Sobel Filter Example")
-
-HTML.H3("upload an image:", parent=app.sidebar)
-HTML.H3("filtered image:", parent=app.main_area)
-
-
+app = bootstrap_templates.PyScriptBootstrapDashboard(parent_element="pyscript_app", brand_name="Image Filter Example")
 
 image_input = bInputs.InputFile(label_text="choose image file", parent=app.sidebar)
-image_input._input.set_attribute("accept", "image/*") # TODO: write wrapper for this
+image_input.set_attribute("accept", "image/*")
 
 def on_image_change(f, *args):
     print("image changed")
@@ -43,4 +36,3 @@ def on_image_change(f, *args):
     output.shadow = bHTML.Shadow.LARGE
 
 image_input.onchange = on_image_change
-

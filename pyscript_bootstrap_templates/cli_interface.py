@@ -1,18 +1,24 @@
 
+from distutils.command.config import config
+from multiprocessing.sharedctypes import Value
 import pathlib
 from typing import List
 import argparse
+from numpy import isin
 import requests
+import json
+import shutil
 
 
 def download_file(url: str, path: pathlib.Path):
-    response = requests.get(url)
-    path.write_bytes(response.content)
+    if pathlib.Path(url).exists():
+        shutil.copy2(url, str(path))
+    else:
+        response = requests.get(url)
+        path.write_bytes(response.content)
 
-# create a new pyscript project
 
-
-def create_project(root_folder: pathlib.Path,
+def generate_project_files(root_folder: pathlib.Path,
                    title: str,
                    packages: List[str],
                    paths: List[str] = None,
@@ -78,11 +84,10 @@ btn.onclick = lambda _: bHTML.AlertSuccess(
     "You clicked me!", parent=app.main_area)
     """
 
-    if root_folder.exists():
-        raise("Value Error: root_folder already exists. Please choose a different name.")
+    root_folder=pathlib.Path(root_folder)
 
-    root_folder.mkdir(parents=True)
-    (root_folder / "resources").mkdir(parents=True)
+    root_folder.mkdir(parents=True, exist_ok=True)
+    (root_folder / "resources").mkdir(parents=True, exist_ok=True)
 
     # Download files:
     download_file(pyscript_css_url, root_folder / "resources" / "pyscript.css")
@@ -94,20 +99,73 @@ btn.onclick = lambda _: bHTML.AlertSuccess(
     download_file(pyscript_bootstrap_templates_wheel_url,
                   root_folder / "resources" / pyscript_bootstrap_templates_wheel_url.split("/")[-1])
 
-    (root_folder / "index.html").write_text(html, encoding="utf-8")
-    (root_folder / "main.py").write_text(py, encoding="utf-8")
+    index_html = (root_folder / "index.html")
+    main_py = (root_folder / "main.py")
 
+    index_html.write_text(html, encoding="utf-8")
+
+    # only create if not existing:
+    if not main_py.exists():
+        main_py.write_text(py, encoding="utf-8")
+
+def create_project(**kwargs):
+
+    root_folder: pathlib.Path = kwargs['root_folder']
+    
+    if root_folder.exists():
+        raise ValueError(f"cannot create project. Folder {str(root_folder)} already exists")
+    
+    root_folder.mkdir(parents=True, exist_ok=True)
+
+    # create initial config.json
+
+    kwargs['root_folder'] = str(root_folder)
+
+    with open(root_folder / "config.json", 'w') as f:
+        json.dump(kwargs, f, indent=4)
+    
+    generate_project_files(**kwargs)
+
+def update_project(**kwargs):
+
+    root_folder: pathlib.Path = kwargs['root_folder']
+    if not root_folder.exists():
+        raise ValueError(f"cannot update project in {str(root_folder)}. Path does not exist")
+    
+    # load config file
+    config_json = root_folder / "config.json"
+    if not config_json.exists():
+        raise ValueError(f"cannot update project in {str(root_folder)}. Found no config.json inside give path")
+    
+    with open(config_json, "r") as f:
+        config = json.load(f)
+    
+    # override config values that are not None or empty lists
+    for arg, val in kwargs.items():
+        if val is not None:
+            if not isinstance(val, list) or len(val) > 0:
+                config[arg] = val
+    
+    generate_project_files(**config)
+
+    config['root_folder'] = str(root_folder)
+
+    with open(root_folder / "config.json", 'w') as f:
+        json.dump(config, f, indent=4)
 
 def main():
 
     argument_parser = argparse.ArgumentParser(
         description="create a new pyscript project")
+
+    argument_parser.add_argument("command", choices=["create","update"])
+    
     argument_parser.add_argument(
         "root_folder", type=pathlib.Path, help="the root folder of the new project")
     argument_parser.add_argument(
         "title", type=str, help="the title of the new project")
     argument_parser.add_argument(
-        "packages", type=str, nargs="*", help="the packages to include in the new project")
+        "--packages", type=str, nargs="+", help="the packages to include in the new project")
     argument_parser.add_argument("--paths", type=str, nargs="+",
                                  help="additional local python files to include in the new project")
     argument_parser.add_argument("--pyscript_css_url", type=str,
@@ -125,7 +183,28 @@ def main():
 
     args = argument_parser.parse_args()
 
-    create_project(args.root_folder, args.title, args.packages, args.paths, args.pyscript_css_url, args.pyscript_js_url, args.pyscript_py_url, args.bootstrap_css_url, args.bootstrap_js_url, args.pyscript_bootstrap_templates_wheel_url)
+    config = {
+        'root_folder': args.root_folder,
+        'title': args.title,
+        'packages': args.packages if args.packages is not None else [],
+        'paths': args.paths if args.paths is not None else [],
+        'pyscript_css_url': args.pyscript_css_url,
+        'pyscript_js_url': args.pyscript_js_url,
+        'pyscript_py_url': args.pyscript_py_url,
+        'bootstrap_css_url': args.bootstrap_css_url,
+        'bootstrap_js_url': args.bootstrap_js_url,
+        'pyscript_bootstrap_templates_wheel_url': args.pyscript_bootstrap_templates_wheel_url
+    }
+
+
+    if args.command == "create":
+        create_project(**config)
+    elif args.command == "update":
+        update_project(**config)
+    else:
+        # should never happen and be catched by argparse#
+        raise ValueError("unknown command", args.command)
+
 
 if __name__ == "__main__":
     main()
