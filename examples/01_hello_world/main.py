@@ -10,6 +10,13 @@ div.font_size = 4
 
 btn = bHTML.ButtonPrimary("Click me", parent=app.sidebar)
 btn.w = 100
-btn.onclick = lambda _: bHTML.AlertSuccess(
-    "You clicked me!", parent=app.main_area)
+
+def onclick(_):
+    alert = bHTML.AlertSuccess("You clicked me!", parent=app.main_area)
+    toast = bHTML.Toast("You clicked me!", parent=app.main_area)
+    toast.position_bottom = 0
+    toast.position_end = 0
+    toast.show()
+
+btn.onclick = onclick
     

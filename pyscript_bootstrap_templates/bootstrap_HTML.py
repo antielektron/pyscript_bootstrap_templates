@@ -1316,6 +1316,52 @@ class TabsDark(Tabs):
 
     _default_navbar_tabs_class = NavbarTabsDark
 
+class ToastHeader(BootstrapContainer):
+
+    _default_class_name = "toast-header"
+
+    def __init__(self, title:str,
+                       inner_html: str = None,
+                       id: str = None,
+                       class_name: str = None,
+                       parent: "Element" = None) -> None:
+        super().__init__(inner_html=inner_html, id=id, class_name=class_name, parent=parent)
+
+        HTML.Strong(title, class_name="me-auto", parent=self)
+        close_button = HTML.Button(class_name="btn-close", parent=self)
+        close_button.set_attribute("data-bs-dismiss", "toast")
+        close_button.set_attribute("aria-label", "Close")
+
+class ToastBody(BootstrapContainer):
+    _default_class_name: str = "toast-body"
+
+class Toast(BootstrapContainer):
+
+    _default_class_name: str = "toast"
+
+    def __init__(self, inner_html: str = None,
+                       title: str = "Toast",
+                       id: str = None,
+                       class_name: str = None,
+                       parent: "Element" = None) -> None:
+
+        super().__init__(id=id, class_name=class_name, parent=parent)
+
+        self.set_attribute("role", "alert")
+        self.set_attribute("aria-live", "assertlive")
+        self.set_attribute("aria-atomic", True)
+        self.set_attribute("style", "position: absolute")
+
+        ToastHeader(title, parent=self)
+        ToastBody(inner_html, parent=self)
+
+        self._js_toast = bootstrap.Toast.new(self.element)
+    
+    def show(self):
+        self._js_toast.show()
+    
+    def hide(self):
+        self._js_toast.hide()
 
 class OffcanvasTitle(HTML.H5, BootstrapContainer):
 
