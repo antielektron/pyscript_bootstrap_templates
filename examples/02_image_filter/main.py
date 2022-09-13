@@ -21,18 +21,28 @@ def sobel_image(img):
 app = bootstrap_templates.PyScriptBootstrapDashboard(parent_element="pyscript_app", brand_name="Image Filter Example")
 
 image_input = bInputs.InputFile(label_text="choose image file", parent=app.sidebar)
-image_input.set_attribute("accept", "image/*")
+
+# FIXME: add filter option to InputFile class!
+image_input._input.set_attribute("accept", "image/*")
+
+toast_container = bHTML.ToastContainer(parent=app.main_area)
+toast_container.position_bottom = 0
+toast_container.position_end = 0
+
 
 def on_image_change(f, *args):
-    print("image changed")
-    print(f)
+
     f.seek(0)
     img = Image.open(f)
+
     img = sobel_image(np.array(img))
 
     output = bHTML.Image.from_numpy_array(img, parent=app.main_area)
     output.rounded = True
     output.rounded_size = 10
     output.shadow = bHTML.Shadow.LARGE
+
+    bHTML.Toast("Processing Done", title="info", parent=toast_container).show()
+
 
 image_input.onchange = on_image_change

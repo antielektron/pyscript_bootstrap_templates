@@ -6,7 +6,8 @@ from . import HTML
 from .bootstrap_HTML_container import *
 from js import bootstrap  # type: ignore
 
-
+class Div(BootstrapContainer):
+    pass
 class Button(HTML.Button, BootstrapContainer):
     _default_class_name = "btn"
 
@@ -1350,7 +1351,7 @@ class Toast(BootstrapContainer):
         self.set_attribute("role", "alert")
         self.set_attribute("aria-live", "assertlive")
         self.set_attribute("aria-atomic", True)
-        self.set_attribute("style", "position: absolute")
+        self.p = 2
 
         ToastHeader(title, parent=self)
         ToastBody(inner_html, parent=self)
@@ -1362,6 +1363,50 @@ class Toast(BootstrapContainer):
     
     def hide(self):
         self._js_toast.hide()
+    
+    def dispose(self):
+        self._js_toast.dispose()
+    
+    @property
+    def animation(self) -> bool:
+        return self.get_attribute("data-bs-animation", is_boolean_attribute=True)
+    
+    @animation.setter
+    def animation(self, value:bool):
+        self.set_attribute("data-bs-animation", attribute_value=value ,is_boolean_attribute=True)
+    
+    @property
+    def autohide(self) -> bool:
+        return self.get_attribute("data-bs-autohide", is_boolean_attribute=True)
+    
+    @autohide.setter
+    def autohide(self, value:bool):
+        self.set_attribute("data-bs-autohide", attribute_value=value ,is_boolean_attribute=True)
+    
+    @property
+    def delay(self) -> bool:
+        return self.get_attribute("data-bs-delay", is_boolean_attribute=True)
+    
+    @delay.setter
+    def delay(self, value:bool):
+        self.set_attribute("data-bs-delay", attribute_value=value ,is_boolean_attribute=True)
+
+class ToastContainer(BootstrapContainer):
+    _default_class_name: str = "toast-container"
+
+    def __init__(self, inner_html: str = None,
+                       id: str = None,
+                       class_name: str = None,
+                       parent: "Element" = None) -> None:
+
+        super().__init__(inner_html=inner_html, id=id, class_name=class_name, parent=parent)
+
+        self.position = Position.ABSOLUTE
+        self.p = 3
+    
+    def show_toast(self, toast: Toast):
+        self.append_child(toast)
+        toast.show()
 
 class OffcanvasTitle(HTML.H5, BootstrapContainer):
 
