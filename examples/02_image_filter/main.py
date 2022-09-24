@@ -25,7 +25,7 @@ image_input = bInputs.InputFile(label_text="choose image file", parent=app.sideb
 # FIXME: add filter option to InputFile class!
 image_input._input.set_attribute("accept", "image/*")
 
-toast_container = bHTML.ToastContainer(parent=app.main_area)
+toast_container = bHTML.ToastContainer(parent=app.main)
 toast_container.position_bottom = 0
 toast_container.position_end = 0
 
@@ -37,7 +37,7 @@ def on_image_change(f, *args):
 
     img = sobel_image(np.array(img))
 
-    output = bHTML.Image.from_numpy_array(img, parent=app.main_area)
+    output = bHTML.Image.from_numpy_array(img, parent=app.main)
     output.rounded = True
     output.rounded_size = 10
     output.shadow = bHTML.Shadow.LARGE
