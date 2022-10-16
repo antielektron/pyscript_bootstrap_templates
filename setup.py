@@ -36,8 +36,8 @@ setup(
     keywords="sample, setuptools, development",
 
     packages=["pyscript_bootstrap_templates"],
-
-
+    include_package_data=True,
+    package_data={'pyscript_bootstrap_templates': ['data', 'data/icon.png']},
     python_requires=">=3.7, <4",
 
     install_requires=[
