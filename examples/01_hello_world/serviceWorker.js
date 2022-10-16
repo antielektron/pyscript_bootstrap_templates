@@ -1,5 +1,5 @@
 
-const pwa_version = "202210160804"
+const pwa_version = "01_hello_world_202210161053"
 const assets = ["./index.html",
     "./main.py",
     "./resources/bootstrap.css",
@@ -22,11 +22,30 @@ self.addEventListener("install", installEvent => {
     )
 })
 
-self.addEventListener("fetch", fetchEvent => {
-    fetchEvent.respondWith(
-        caches.match(fetchEvent.request).then(res => {
-            return res || fetch(fetchEvent.request)
-        }).catch(err => console.log("Cache fetch error: ", err))
-    )
-})
+self.addEventListener('activate', e => {
+	console.log('Service Worker: Activated');
+});
+ 
+self.addEventListener('fetch', event => {
+    if (event.request.method != 'GET')
+        return;
+	event.respondWith((async () => {
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+
+        const response = await fetch(event.request);
+
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+        }
+
+        const responseToCache = response.clone();
+        const cache = await caches.open(pwa_version)
+        await cache.put(event.request, response.clone());
+
+        return response;
+    })());
+});
     

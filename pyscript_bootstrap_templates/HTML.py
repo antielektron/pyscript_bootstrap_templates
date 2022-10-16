@@ -2,7 +2,7 @@
 from typing import Callable, Iterable, Union
 import uuid
 from js import document, CanvasRenderingContext2D  # type: ignore
-from pyodide import create_proxy  # type: ignore
+from pyodide.ffi import create_proxy  # type: ignore
 from parse import *
 import base64
 from PIL import Image as PILImage

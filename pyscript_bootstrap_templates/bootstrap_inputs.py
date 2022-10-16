@@ -3,7 +3,7 @@ import uuid
 
 from .bootstrap_HTML import *
 from js import document, FileReader, btoa, Uint8Array   # type: ignore
-from pyodide import create_proxy  # type: ignore
+from pyodide.ffi import create_proxy  # type: ignore
 import io
 import base64
 

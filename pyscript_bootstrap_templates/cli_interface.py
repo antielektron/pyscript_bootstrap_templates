@@ -52,7 +52,7 @@ def create_pwa_manifest(root_folder: pathlib.Path, **kwargs):
     download_file(str(default_icon_path), root_folder / "resources" / "icon-512x512.png")
 
 def create_pwa_service_worker(root_folder: pathlib.Path, **kwargs):
-    version = dt.datetime.utcnow().strftime("%Y%m%d%H%M")
+    version = f"{kwargs['title']}_{dt.datetime.utcnow().strftime('%Y%m%d%H%M')}"
     assets = [
         *[f'"./{p}",' for p in kwargs['paths']],
         '"./index.html",',
@@ -83,13 +83,32 @@ self.addEventListener("install", installEvent => {{
     )
 }})
 
-self.addEventListener("fetch", fetchEvent => {{
-    fetchEvent.respondWith(
-        caches.match(fetchEvent.request).then(res => {{
-            return res || fetch(fetchEvent.request)
-        }}).catch(err => console.log("Cache fetch error: ", err))
-    )
-}})
+self.addEventListener('activate', e => {{
+	console.log('Service Worker: Activated');
+}});
+ 
+self.addEventListener('fetch', event => {{
+    if (event.request.method != 'GET')
+        return;
+	event.respondWith((async () => {{
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) {{
+            return cachedResponse;
+        }}
+
+        const response = await fetch(event.request);
+
+        if (!response || response.status !== 200 || response.type !== 'basic') {{
+            return response;
+        }}
+
+        const responseToCache = response.clone();
+        const cache = await caches.open(pwa_version)
+        await cache.put(event.request, response.clone());
+
+        return response;
+    }})());
+}});
     """
 
     pwa_js = """
@@ -117,24 +136,27 @@ def generate_project_files(root_folder: pathlib.Path,
                    title: str,
                    packages: List[str],
                    paths: List[str] = None,
-                   pyscript_css_url: str = "https://pyscript.net/alpha/pyscript.css",
-                   pyscript_js_url: str = "https://pyscript.net/alpha/pyscript.min.js",
-                   pyscript_py_url: str = "https://pyscript.net/alpha/pyscript.py",
+                   pyscript_css_url: str = "https://pyscript.net/latest/pyscript.css",
+                   pyscript_js_url: str = "https://pyscript.net/latest/pyscript.min.js",
+                   pyscript_py_url: str = "https://pyscript.net/latest/pyscript.py",
                    bootstrap_css_url: str = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
                    bootstrap_js_url: str = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js",
                    pyscript_bootstrap_templates_wheel_url: str = "https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl",
                    **_):
 
-    pyenv = f"- ./resources/{pyscript_bootstrap_templates_wheel_url.split('/')[-1]}"
-    for package in packages:
-        pyenv += f"\n            - {package}"
+    if paths is None:
+        paths = []
 
-    if paths is not None:
-        pyenv += "\n            - paths:"
-        for path in paths:
-            pyenv += f"\n                - {path}"
-
-    pyenv += "\n"
+    pyconfig = {
+        "autoclose_loader": True,
+        "packages": [
+            f"./resources/{pyscript_bootstrap_templates_wheel_url.split('/')[-1]}",
+            *packages
+        ],
+        "paths": [
+            *paths
+        ]
+    }
 
     html = f"""
 <!DOCTYPE html>
@@ -145,24 +167,23 @@ def generate_project_files(root_folder: pathlib.Path,
 
         <link rel="manifest" href="manifest.json" />
 
+        <script src="./resources/pwa.js"></script>
+
         <link rel="stylesheet" href="./resources/pyscript.css" />
         <script defer src="./resources/pyscript.js"></script>
-
         <!-- Bootstrap CSS -->
         <link href="./resources/bootstrap.css" rel="stylesheet">
 
         <title>{title}</title>
-
-        <py-env>
-            {pyenv}
-        </py-env>
     </head>
     <body style="width: 100%; height: 100%">
+        <py-config type="json">
+            {json.dumps(pyconfig, indent=4)}
+        </py-config>
         <div id="pyscript_app" style="height: 100%; min-height: 100%"></div>
         <py-script src="./main.py"></py-script>
 
         <script src="./resources/bootstrap.js"></script>
-        <script src="./resources/pwa.js"></script>
     </body>
 </html>
     """
@@ -275,11 +296,11 @@ def main():
     argument_parser.add_argument("--paths", type=str, nargs="+",
                                  help="additional local python files to include in the new project")
     argument_parser.add_argument("--pyscript-css-url", type=str,
-                                 help="the url of the pyscript css file", default="https://pyscript.net/alpha/pyscript.css")
+                                 help="the url of the pyscript css file", default="https://pyscript.net/latest/pyscript.css")
     argument_parser.add_argument("--pyscript-js-url", type=str,
-                                 help="the url of the pyscript js file", default="https://pyscript.net/alpha/pyscript.min.js")
+                                 help="the url of the pyscript js file", default="https://pyscript.net/latest/pyscript.js")
     argument_parser.add_argument("--pyscript-py-url", type=str,
-                                    help="the url of the pyscript py file", default="https://pyscript.net/alpha/pyscript.py")
+                                    help="the url of the pyscript py file", default="https://pyscript.net/latest/pyscript.py")
     argument_parser.add_argument("--bootstrap-css-url", type=str,
                                     help="the url of the bootstrap css file", default="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css")
     argument_parser.add_argument("--bootstrap-js-url", type=str,
