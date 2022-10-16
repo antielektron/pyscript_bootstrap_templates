@@ -201,7 +201,7 @@ div.font_size = 4
 btn = bHTML.ButtonPrimary("Click me", parent=app.sidebar)
 btn.w = 100
 btn.onclick = lambda _: bHTML.AlertSuccess(
-    "You clicked me!", parent=app.main_area)
+    "You clicked me!", parent=app.main)
     """
 
     root_folder=pathlib.Path(root_folder)
