@@ -9,5 +9,5 @@ wheel_files=( dist/*whl )
 cd ./examples/
 
 for example in *;
-    do pyscript_bootstrap_app update $example $example --pyscript_bootstrap_templates_wheel_url ../${wheel_files[0]}
+    do pyscript_bootstrap_app update $example $example --pyscript-bootstrap-templates-wheel-url ../${wheel_files[0]}
 done

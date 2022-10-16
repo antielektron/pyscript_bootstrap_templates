@@ -8,7 +8,8 @@ from numpy import isin
 import requests
 import json
 import shutil
-
+import datetime as dt
+import pkg_resources
 
 def download_file(url: str, path: pathlib.Path):
     if pathlib.Path(url).exists():
@@ -16,6 +17,100 @@ def download_file(url: str, path: pathlib.Path):
     else:
         response = requests.get(url)
         path.write_bytes(response.content)
+
+
+def create_pwa_manifest(root_folder: pathlib.Path, **kwargs):
+    """
+    creating the PWA's manifest file
+    """
+
+    #TODO: make icon configurable
+
+    manifest_dict = {
+        "name": kwargs['title'],
+        "short_name": kwargs['title'],
+        "start_url": "./index.html",
+        "scope": ".",
+        "display": "standalone",
+        "background_color": kwargs['pwa_bg_color'],
+        "theme_color": kwargs['pwa_theme_color'],
+        "icons": [
+            {
+                "src": "resources/icon-512x512.png",
+                "type": "image/png",
+                "sizes": "512x512" 
+            }
+        ]
+    }
+
+    with open(root_folder / "manifest.json", "w") as f:
+        json.dump(manifest_dict, f)
+    
+    # create dummy icon TODO: making this configurable
+
+    default_icon_path = pkg_resources.resource_filename('pyscript_bootstrap_templates', 'data/icon.png')
+    download_file(str(default_icon_path), root_folder / "resources" / "icon-512x512.png")
+
+def create_pwa_service_worker(root_folder: pathlib.Path, **kwargs):
+    version = dt.datetime.utcnow().strftime("%Y%m%d%H%M")
+    assets = [
+        *[f'"./{p}",' for p in kwargs['paths']],
+        '"./index.html",',
+        '"./main.py",',
+        '"./resources/bootstrap.css",',
+        '"./resources/bootstrap.js",',
+        '"./resources/pyscript.css",',
+        '"./resources/pyscript.js",',
+        '"./resources/pyscript.py",',
+        f'"./resources/{kwargs["pyscript_bootstrap_templates_wheel_url"].split("/")[-1]}",', # FIXME: not completely os independent
+        '"./resources/pwa.js",',
+        '"./site.js",'
+    ]
+
+    assets_str = "[" + "\n    ".join(assets) + "\n]"
+
+    service_worker_js = f"""
+const pwa_version = "{version}"
+const assets = {assets_str}
+self.addEventListener("install", installEvent => {{
+    installEvent.waitUntil(
+        caches.open(pwa_version).then(cache => {{
+            cache.addAll(assets).then(r => {{
+                console.log("Cache assets downloaded");
+            }}).catch(err => console.log("Error caching item", err))
+            console.log(`Cache ${{pwa_version}} opened.`);
+        }}).catch(err => console.log("Error opening cache", err))
+    )
+}})
+
+self.addEventListener("fetch", fetchEvent => {{
+    fetchEvent.respondWith(
+        caches.match(fetchEvent.request).then(res => {{
+            return res || fetch(fetchEvent.request)
+        }}).catch(err => console.log("Cache fetch error: ", err))
+    )
+}})
+    """
+
+    pwa_js = """
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker
+            .register("./serviceWorker.js")
+            .then(res => console.log("service worker registered", res))
+            .catch(err => console.log("service worker not registered", err))
+    })
+}
+    """
+
+    site_js = """
+    """
+
+    # write js files:
+    (root_folder / "serviceWorker.js").write_text(service_worker_js, encoding="utf-8")
+    (root_folder / "resources" / "pwa.js").write_text(pwa_js, encoding="utf-8")
+    (root_folder / "site.js").write_text(site_js, encoding="utf-8")
+
 
 
 def generate_project_files(root_folder: pathlib.Path,
@@ -27,7 +122,8 @@ def generate_project_files(root_folder: pathlib.Path,
                    pyscript_py_url: str = "https://pyscript.net/alpha/pyscript.py",
                    bootstrap_css_url: str = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
                    bootstrap_js_url: str = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js",
-                   pyscript_bootstrap_templates_wheel_url: str = "https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl"):
+                   pyscript_bootstrap_templates_wheel_url: str = "https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl",
+                   **_):
 
     pyenv = f"- ./resources/{pyscript_bootstrap_templates_wheel_url.split('/')[-1]}"
     for package in packages:
@@ -47,6 +143,8 @@ def generate_project_files(root_folder: pathlib.Path,
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="manifest" href="manifest.json" />
+
         <link rel="stylesheet" href="./resources/pyscript.css" />
         <script defer src="./resources/pyscript.js"></script>
 
@@ -64,6 +162,7 @@ def generate_project_files(root_folder: pathlib.Path,
         <py-script src="./main.py"></py-script>
 
         <script src="./resources/bootstrap.js"></script>
+        <script src="./resources/pwa.js"></script>
     </body>
 </html>
     """
@@ -107,6 +206,8 @@ btn.onclick = lambda _: bHTML.AlertSuccess(
     # only create if not existing:
     if not main_py.exists():
         main_py.write_text(py, encoding="utf-8")
+    
+
 
 def create_project(**kwargs):
 
@@ -118,13 +219,16 @@ def create_project(**kwargs):
     root_folder.mkdir(parents=True, exist_ok=True)
 
     # create initial config.json
+    
+    generate_project_files(**kwargs)
+    create_pwa_manifest(**kwargs)
+    create_pwa_service_worker(**kwargs)
 
     kwargs['root_folder'] = str(root_folder)
 
     with open(root_folder / "config.json", 'w') as f:
         json.dump(kwargs, f, indent=4)
-    
-    generate_project_files(**kwargs)
+
 
 def update_project(**kwargs):
 
@@ -147,6 +251,8 @@ def update_project(**kwargs):
                 config[arg] = val
     
     generate_project_files(**config)
+    create_pwa_manifest(**kwargs)
+    create_pwa_service_worker(**kwargs)
 
     config['root_folder'] = str(root_folder)
 
@@ -168,18 +274,22 @@ def main():
         "--packages", type=str, nargs="+", help="the packages to include in the new project")
     argument_parser.add_argument("--paths", type=str, nargs="+",
                                  help="additional local python files to include in the new project")
-    argument_parser.add_argument("--pyscript_css_url", type=str,
+    argument_parser.add_argument("--pyscript-css-url", type=str,
                                  help="the url of the pyscript css file", default="https://pyscript.net/alpha/pyscript.css")
-    argument_parser.add_argument("--pyscript_js_url", type=str,
+    argument_parser.add_argument("--pyscript-js-url", type=str,
                                  help="the url of the pyscript js file", default="https://pyscript.net/alpha/pyscript.min.js")
-    argument_parser.add_argument("--pyscript_py_url", type=str,
+    argument_parser.add_argument("--pyscript-py-url", type=str,
                                     help="the url of the pyscript py file", default="https://pyscript.net/alpha/pyscript.py")
-    argument_parser.add_argument("--bootstrap_css_url", type=str,
+    argument_parser.add_argument("--bootstrap-css-url", type=str,
                                     help="the url of the bootstrap css file", default="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css")
-    argument_parser.add_argument("--bootstrap_js_url", type=str,
+    argument_parser.add_argument("--bootstrap-js-url", type=str,
                                     help="the url of the bootstrap js file", default="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")
-    argument_parser.add_argument("--pyscript_bootstrap_templates_wheel_url", type=str,
+    argument_parser.add_argument("--pyscript-bootstrap-templates-wheel-url", type=str,
                                     help="the url of the pyscript bootstrap templates wheel file", default="https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl")
+    argument_parser.add_argument("--pwa-bg-color", type=str, help="background color for pwa configuration", default="#000000")
+    argument_parser.add_argument("--pwa-theme-color", type=str, help="theme color for pwa configuration", default="#ffffff")
+
+
 
     args = argument_parser.parse_args()
 
@@ -193,8 +303,12 @@ def main():
         'pyscript_py_url': args.pyscript_py_url,
         'bootstrap_css_url': args.bootstrap_css_url,
         'bootstrap_js_url': args.bootstrap_js_url,
-        'pyscript_bootstrap_templates_wheel_url': args.pyscript_bootstrap_templates_wheel_url
+        'pyscript_bootstrap_templates_wheel_url': args.pyscript_bootstrap_templates_wheel_url,
+        'pwa_bg_color': args.pwa_bg_color,
+        'pwa_theme_color': args.pwa_theme_color
     }
+
+
 
 
     if args.command == "create":
