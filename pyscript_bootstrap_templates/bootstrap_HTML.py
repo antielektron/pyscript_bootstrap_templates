@@ -516,9 +516,11 @@ class Card(BootstrapContainer):
         self._title_image = title_image
         self._card_header = card_header
 
-        self.append_child(card_body)
-        self.append_child(title_image)
         self.append_child(card_header)
+        self.append_child(title_image)
+        self.append_child(card_body)
+        
+        
 
     @property
     def card_body(self) -> HTML.Div:

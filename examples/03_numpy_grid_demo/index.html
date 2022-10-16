@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en" style="width: 100%;height: 100%">
+    <head id="head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="manifest" href="manifest.json" />
+
+        <script src="./resources/pwa.js"></script>
+
+        <link rel="stylesheet" href="./resources/pyscript.css" />
+        <script defer src="./resources/pyscript.js"></script>
+        <!-- Bootstrap CSS -->
+        <link href="./resources/bootstrap.css" rel="stylesheet">
+
+        <title>03_numpy_grid_demo</title>
+    </head>
+    <body style="width: 100%; height: 100%">
+        <py-config type="json">
+            {
+    "autoclose_loader": true,
+    "packages": [
+        "./resources/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl",
+        "numpy"
+    ],
+    "paths": []
+}
+        </py-config>
+        <div id="pyscript_app" style="height: 100%; min-height: 100%"></div>
+        <py-script src="./main.py"></py-script>
+
+        <script src="./resources/bootstrap.js"></script>
+    </body>
+</html>
+    

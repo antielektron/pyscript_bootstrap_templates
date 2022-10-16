@@ -23,14 +23,6 @@ class InputHelp(BootstrapContainer):
 class InputFormControl(HTML.Input, BootstrapContainer):
     _default_class_name: str = "form-control"
 
-    @property
-    def value(self) -> str:
-        return self._parse_value()
-
-    @value.setter
-    def value(self, value: str):
-        self._set_value(value)
-
 
 class InputFormControlColor(InputFormControl):
     _default_class_name: str = "form-control form-control-color"

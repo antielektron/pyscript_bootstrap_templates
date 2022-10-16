@@ -1282,11 +1282,11 @@ class Input(Element):
 
     @property
     def value(self) -> str:
-        return self.get_attribute("value")
+        return self._element.value
 
     @value.setter
     def value(self, value: str) -> None:
-        self.set_attribute("value", value)
+        self._element.value = value
 
     @property
     def placeholder(self) -> str:

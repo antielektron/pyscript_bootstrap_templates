@@ -1,5 +1,5 @@
 
-const pwa_version = "02_image_filter_202210161638"
+const pwa_version = "03_numpy_grid_demo_202210161638"
 const assets = ["./index.html",
     "./main.py",
     "./resources/bootstrap.css",
