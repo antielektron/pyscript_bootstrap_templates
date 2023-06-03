@@ -1,11 +1,12 @@
 {
-    "root_folder": "02_image_filter",
-    "title": "02_image_filter",
+    "root_folder": "04_cell_detector",
+    "title": "04_cell_detector",
     "packages": [
         "numpy",
-        "scikit-image"
+        "Pillow",
+        "opencv-python"
     ],
-    "paths": null,
+    "paths": [],
     "pyscript_css_url": "https://pyscript.net/latest/pyscript.css",
     "pyscript_js_url": "https://pyscript.net/latest/pyscript.js",
     "pyscript_py_url": "https://pyscript.net/latest/pyscript.py",

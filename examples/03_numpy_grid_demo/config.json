@@ -10,7 +10,7 @@
     "pyscript_py_url": "https://pyscript.net/latest/pyscript.py",
     "bootstrap_css_url": "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
     "bootstrap_js_url": "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js",
-    "pyscript_bootstrap_templates_wheel_url": "../dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl",
+    "pyscript_bootstrap_templates_wheel_url": "../dist/pyscript_bootstrap_templates-0.2.0-py3-none-any.whl",
     "pwa_bg_color": "#000000",
     "pwa_theme_color": "#ffffff"
 }

@@ -323,8 +323,6 @@ class InputFile(InputElement):
 
             name = f.name
 
-            print("loaded ", name)
-
             uint8_array = Uint8Array.new(await f.arrayBuffer())
             buffer = io.BytesIO(bytearray(uint8_array))
             self._files[name] = buffer

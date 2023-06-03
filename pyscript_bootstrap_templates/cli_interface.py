@@ -1,10 +1,7 @@
 
-from distutils.command.config import config
-from multiprocessing.sharedctypes import Value
 import pathlib
 from typing import List
 import argparse
-from numpy import isin
 import requests
 import json
 import shutil
@@ -53,6 +50,7 @@ def create_pwa_manifest(root_folder: pathlib.Path, **kwargs):
 
 def create_pwa_service_worker(root_folder: pathlib.Path, **kwargs):
     version = f"{kwargs['title']}_{dt.datetime.utcnow().strftime('%Y%m%d%H%M')}"
+    bslash = "\\"
     assets = [
         *[f'"./{p}",' for p in kwargs['paths']],
         '"./index.html",',
@@ -62,7 +60,7 @@ def create_pwa_service_worker(root_folder: pathlib.Path, **kwargs):
         '"./resources/pyscript.css",',
         '"./resources/pyscript.js",',
         '"./resources/pyscript.py",',
-        f'"./resources/{kwargs["pyscript_bootstrap_templates_wheel_url"].split("/")[-1]}",', # FIXME: not completely os independent
+        f'"./resources/{kwargs["pyscript_bootstrap_templates_wheel_url"].replace(bslash,"/").split("/")[-1]}",', # FIXME: not completely os independent
         '"./resources/pwa.js",',
         '"./site.js",'
     ]
@@ -148,7 +146,9 @@ def generate_project_files(root_folder: pathlib.Path,
         paths = []
 
     pyconfig = {
-        "autoclose_loader": True,
+        "splashscreen":{
+            "autoclose": True,
+        },
         "packages": [
             f"./resources/{pyscript_bootstrap_templates_wheel_url.split('/')[-1]}",
             *packages

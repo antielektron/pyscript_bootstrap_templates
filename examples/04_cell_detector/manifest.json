@@ -1,0 +1,1 @@
+{"name": "04_cell_detector", "short_name": "04_cell_detector", "start_url": "./index.html", "scope": ".", "display": "standalone", "background_color": "#000000", "theme_color": "#ffffff", "icons": [{"src": "resources/icon-512x512.png", "type": "image/png", "sizes": "512x512"}]}
