@@ -6,8 +6,11 @@ To do this, it uses [pyscript](https://pyscript.net/) and builds python wrapper 
 
 ![image-20230604191240295](img/demo.png)
 
-* See the examples here (`TODO`)
-    * (Code is in [examples](./examples/))
+* examples (Code is in [examples](./examples/)):
+    * [Hello World](https://antielektron.github.io/pyscript_bootstrap_templates/examples/)
+    * [scikit-image sobel filter](https://antielektron.github.io/pyscript_bootstrap_templates/examples/02_image_filter)
+    * [numpy grid demo](https://antielektron.github.io/pyscript_bootstrap_templates/examples/03_numpy_grid_demo)
+    * [cell colony detector using opencv](https://antielektron.github.io/pyscript_bootstrap_templates/examples/04_cell_detector)
 
 ## installation
 
