@@ -1,7 +1,7 @@
 # pyscript-bootstrap-templates
 
 
-This package provides tools to write a single page Dashboard apps with python that run entirely client-side in the Browser.
+This package provides tools to write single page Dashboard apps with python that run entirely client-side in the Browser.
 To do this, it uses [pyscript](https://pyscript.net/) and builds python wrapper classes for various [bootstrap](https://getbootstrap.com/) elements.
 
 ![image-20230604191240295](img/demo.png)
