@@ -796,16 +796,22 @@ class Col(BootstrapContainer):
                  class_name: str = None,
                  parent: HTML.Element = None,
                  col: int = None,
+                 col_xs: int = None,
                  col_sm: int = None,
                  col_md: int = None,
                  col_lg: int = None,
                  col_xl: int = None,
                  col_xxl: int = None) -> None:
 
+
+        super().__init__(inner_html, id, class_name, parent)
+
+
         if col is not None:
             self.col = col
 
-        super().__init__(inner_html, id, class_name, parent)
+        if col_xs is not None:
+            self.col_xs = col_xs
 
         if col_sm is not None:
             self.col_sm = col_sm
@@ -1110,6 +1116,9 @@ class NavbarBrand(HTML.A, BootstrapContainer):
                          parent=parent)
 
         self.set_attribute("href", href)
+        self.ms = 3
+        self.me = 3
+
 
 
 class Navbar(BootstrapContainer):

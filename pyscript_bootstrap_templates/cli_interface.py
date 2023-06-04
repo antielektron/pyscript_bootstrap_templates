@@ -107,6 +107,17 @@ self.addEventListener('fetch', event => {{
         return response;
     }})());
 }});
+self.addEventListener('activate', (event) => {{
+    event.waitUntil(
+        caches.keys().then((keyList) => {{
+            return Promise.all(keyList.map((key) => {{
+                if(key !== pwa_version) {{
+                    return caches.delete(key);
+                }}
+            }}));
+        }})
+    );
+}});
     """
 
     pwa_js = """
@@ -306,7 +317,7 @@ def main():
     argument_parser.add_argument("--bootstrap-js-url", type=str,
                                     help="the url of the bootstrap js file", default="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js")
     argument_parser.add_argument("--pyscript-bootstrap-templates-wheel-url", type=str,
-                                    help="the url of the pyscript bootstrap templates wheel file", default="https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.1.0-py3-none-any.whl")
+                                    help="the url of the pyscript bootstrap templates wheel file", default="https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates/raw/branch/main/dist/pyscript_bootstrap_templates-0.2.0-py3-none-any.whl")
     argument_parser.add_argument("--pwa-bg-color", type=str, help="background color for pwa configuration", default="#000000")
     argument_parser.add_argument("--pwa-theme-color", type=str, help="theme color for pwa configuration", default="#ffffff")
 

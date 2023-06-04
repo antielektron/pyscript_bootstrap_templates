@@ -20,6 +20,8 @@ toast_container.position_end = 0
 
 
 def onclick(_):
+    # NOTE: you can also use app.toast(...) and app.alert_success(...) to show toasts
+    # and alerts at the default bottom right position
     alert = bHTML.AlertSuccess("You clicked me!", parent=app.main)
     alert.w = 25
     toast = bHTML.Toast("You clicked me!", parent=toast_container)
@@ -27,4 +29,3 @@ def onclick(_):
     toast.show()
 
 btn.onclick = onclick
-    

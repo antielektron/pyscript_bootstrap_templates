@@ -314,6 +314,15 @@ class BootstrapContainer(HTML.Div):
     def text_align(self, value: Union[TextAlign, None]):
         self._set_enum_property(
             value=value, prefix="text-", enum_class=TextAlign, enum_values=_TEXT_ALIGNS)
+    
+    @property
+    def text_align_xs(self) -> Union[TextAlign, None]:
+        return self._get_enum_property(prefix="text-", enum_class=TextAlign, enum_values=_TEXT_ALIGNS, breakpoint="xs")
+
+    @text_align_xs.setter
+    def text_align_xs(self, value: Union[TextAlign, None]):
+        self._set_enum_property(value=value, prefix="text-",
+                                enum_class=TextAlign, enum_values=_TEXT_ALIGNS, breakpoint="xs")
 
     @property
     def text_align_sm(self) -> Union[TextAlign, None]:
@@ -558,6 +567,15 @@ class BootstrapContainer(HTML.Div):
     def display_property(self, value: Union[DisplayProperty, None]):
         self._set_enum_property(
             value=value, prefix="d-", enum_class=DisplayProperty, enum_values=_DISPLAY_PROPERTIES)
+    
+    @property
+    def display_property_xs(self) -> Union[DisplayProperty, None]:
+        return self._get_enum_property(prefix="d-", enum_class=DisplayProperty, enum_values=_DISPLAY_PROPERTIES, breakpoint="xs")
+
+    @display_property_xs.setter
+    def display_property_xs(self, value: Union[DisplayProperty, None]):
+        self._set_enum_property(value=value, prefix="d-", enum_class=DisplayProperty,
+                                enum_values=_DISPLAY_PROPERTIES, breakpoint="xs")
 
     @property
     def display_property_sm(self) -> Union[DisplayProperty, None]:
@@ -1112,6 +1130,17 @@ class BootstrapContainer(HTML.Div):
     @p.setter
     def p(self, value: Union[int, str, None]):
         self._set_css_param_number("p-", value)
+    
+    @property
+    def p_xs(self) -> Union[int, str, None]:
+        """
+        element's padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("p-", "xs")
+
+    @p_xs.setter
+    def p_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("p-", value, "xs")
 
     @property
     def p_sm(self) -> Union[int, str, None]:
@@ -1178,6 +1207,17 @@ class BootstrapContainer(HTML.Div):
     @px.setter
     def px(self, value: Union[int, str, None]):
         self._set_css_param_number("px-", value)
+    
+    @property
+    def px_xs(self) -> Union[int, str, None]:
+        """
+        element's horizontal padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("px-", "xs")
+
+    @px_xs.setter
+    def px_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("px-", value, "xs")
 
     @property
     def px_sm(self) -> Union[int, str, None]:
@@ -1246,6 +1286,17 @@ class BootstrapContainer(HTML.Div):
         self._set_css_param_number("py-", value)
 
     @property
+    def py_xs(self) -> Union[int, str, None]:
+        """
+        element's vertical padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("py-", "xs")
+
+    @py_xs.setter
+    def py_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("py-", value, "xs")
+
+    @property
     def py_sm(self) -> Union[int, str, None]:
         """
         element's vertical padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
@@ -1312,6 +1363,17 @@ class BootstrapContainer(HTML.Div):
         self._set_css_param_number("pt-", value)
 
     @property
+    def pt_xs(self) -> Union[int, str, None]:
+        """
+        element's top padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("pt-", "xs")
+
+    @pt_xs.setter
+    def pt_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("pt-", value, "xs")
+
+    @property
     def pt_sm(self) -> Union[int, str, None]:
         """
         element's top padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
@@ -1376,6 +1438,17 @@ class BootstrapContainer(HTML.Div):
     @pb.setter
     def pb(self, value: Union[int, str, None]):
         self._set_css_param_number("pb-", value)
+    
+    @property
+    def pb_xs(self) -> Union[int, str, None]:
+        """
+        element's bottom padding for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("pb-", "xs")
+
+    @pb_xs.setter
+    def pb_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("pb-", value, "xs")
 
     @property
     def pb_sm(self) -> Union[int, str, None]:
@@ -1442,6 +1515,17 @@ class BootstrapContainer(HTML.Div):
     @ps.setter
     def ps(self, value: Union[int, str, None]):
         self._set_css_param_number("ps-", value)
+    
+    @property
+    def ps_xs(self) -> Union[int, str, None]:
+        """
+        element's start padding (left for LTR languages) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("ps-", "xs")
+
+    @ps_xs.setter
+    def ps_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("ps-", value, "xs")
 
     @property
     def ps_sm(self) -> Union[int, str, None]:
@@ -1508,6 +1592,17 @@ class BootstrapContainer(HTML.Div):
     @pe.setter
     def pe(self, value: Union[int, str, None]):
         self._set_css_param_number("pe-", value)
+    
+    @property
+    def pe_xs(self) -> Union[int, str, None]:
+        """
+        element's end padding (right for LTR languages) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("pe-", "xs")
+
+    @pe_xs.setter
+    def pe_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("pe-", value, "xs")
 
     @property
     def pe_sm(self) -> Union[int, str, None]:
@@ -1576,6 +1671,17 @@ class BootstrapContainer(HTML.Div):
     @m.setter
     def m(self, value: Union[int, str, None]):
         self._set_css_param_number("m-", value)
+    
+    @property
+    def m_xs(self) -> Union[int, str, None]:
+        """
+        element's margin for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("m-", "xs")
+
+    @m_xs.setter
+    def m_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("m-", value, "xs")
 
     @property
     def m_sm(self) -> Union[int, str, None]:
@@ -1642,6 +1748,17 @@ class BootstrapContainer(HTML.Div):
     @mx.setter
     def mx(self, value: Union[int, str, None]):
         self._set_css_param_number("mx-", value)
+    
+    @property
+    def mx_xs(self) -> Union[int, str, None]:
+        """
+        element's margin-left and margin-right for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("mx-", "xs")
+
+    @mx_xs.setter
+    def mx_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("mx-", value, "xs")
 
     @property
     def mx_sm(self) -> Union[int, str, None]:
@@ -1708,6 +1825,17 @@ class BootstrapContainer(HTML.Div):
     @my.setter
     def my(self, value: Union[int, str, None]):
         self._set_css_param_number("my-", value)
+    
+    @property
+    def my_xs(self) -> Union[int, str, None]:
+        """
+        element's margin-top and margin-bottom for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("my-", "xs")
+
+    @my_xs.setter
+    def my_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("my-", value, "xs")
 
     @property
     def my_sm(self) -> Union[int, str, None]:
@@ -1774,6 +1902,17 @@ class BootstrapContainer(HTML.Div):
     @mt.setter
     def mt(self, value: Union[int, str, None]):
         self._set_css_param_number("mt-", value)
+    
+    @property
+    def mt_xs(self) -> Union[int, str, None]:
+        """
+        element's margin-top for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("mt-", "xs")
+
+    @mt_xs.setter
+    def mt_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("mt-", value, "xs")
 
     @property
     def mt_sm(self) -> Union[int, str, None]:
@@ -1840,6 +1979,17 @@ class BootstrapContainer(HTML.Div):
     @mb.setter
     def mb(self, value: Union[int, str, None]):
         self._set_css_param_number("mb-", value)
+    
+    @property
+    def mb_xs(self) -> Union[int, str, None]:
+        """
+        element's margin-bottom for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("mb-", "xs")
+
+    @mb_xs.setter
+    def mb_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("mb-", value, "xs")
 
     @property
     def mb_sm(self) -> Union[int, str, None]:
@@ -1908,6 +2058,17 @@ class BootstrapContainer(HTML.Div):
         self._set_css_param_number("ms-", value)
 
     @property
+    def ms_xs(self) -> Union[int, str, None]:
+        """
+        element's start margin (left for LTR languages) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("ms-", "xs")
+
+    @ms_xs.setter
+    def ms_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("ms-", value, "xs")
+
+    @property
     def ms_sm(self) -> Union[int, str, None]:
         """
         element's start margin (left for LTR languages) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
@@ -1972,6 +2133,17 @@ class BootstrapContainer(HTML.Div):
     @me.setter
     def me(self, value: Union[int, str, None]):
         self._set_css_param_number("me-", value)
+    
+    @property
+    def me_xs(self) -> Union[int, str, None]:
+        """
+        element's end margin (right for LTR languages) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5,auto
+        """
+        return self._get_css_param_number("me-", "xs")
+
+    @me_xs.setter
+    def me_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("me-", value, "xs")
 
     @property
     def me_sm(self) -> Union[int, str, None]:
@@ -2042,6 +2214,17 @@ class BootstrapContainer(HTML.Div):
         self._set_css_param_number("g-", value)
 
     @property
+    def g_xs(self) -> Union[int, str, None]:
+        """
+        gutter (gutters are the space between the element and its content) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5
+        """
+        return self._get_css_param_number("g-", "xs")
+
+    @g_xs.setter
+    def g_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("g-", value, "xs")
+
+    @property
     def g_sm(self) -> Union[int, str, None]:
         """
         gutter (gutters are the space between the element and its content) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5
@@ -2106,6 +2289,17 @@ class BootstrapContainer(HTML.Div):
     @gx.setter
     def gx(self, value: Union[int, str, None]):
         self._set_css_param_number("gx-", value)
+
+    @property
+    def gx_xs(self) -> Union[int, str, None]:
+        """
+        horizontal gutter (gutters are the space between the element and its content) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5
+        """
+        return self._get_css_param_number("gx-", "xs")
+
+    @gx_xs.setter
+    def gx_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("gx-", value, "xs")
 
     @property
     def gx_sm(self) -> Union[int, str, None]:
@@ -2174,6 +2368,17 @@ class BootstrapContainer(HTML.Div):
         self._set_css_param_number("gy-", value)
 
     @property
+    def gy_xs(self) -> Union[int, str, None]:
+        """
+        vertical gutter (gutters are the space between the element and its content) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5
+        """
+        return self._get_css_param_number("gy-", "xs")
+
+    @gy_xs.setter
+    def gy_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("gy-", value, "xs")
+
+    @property
     def gy_sm(self) -> Union[int, str, None]:
         """
         vertical gutter (gutters are the space between the element and its content) for small screens. By default, bootstrap defines the values 0,1,2,3,4,5
@@ -2240,6 +2445,17 @@ class BootstrapContainer(HTML.Div):
     @col.setter
     def col(self, value: Union[int, str, None]):
         self._set_css_param_number("col-", value)
+
+    @property
+    def col_xs(self) -> Union[int, str, None]:
+        """
+        column class for very small screens. By default, bootstrap defines the values 1,2,3,4,5,6,7,8,9,10,11,12
+        """
+        return self._get_css_param_number("col-", "xs")
+    
+    @col_xs.setter
+    def col_xs(self, value: Union[int, str, None]):
+        self._set_css_param_number("col-", value, "xs")
     
     @property
     def col_sm(self) -> Union[int, str, None]:

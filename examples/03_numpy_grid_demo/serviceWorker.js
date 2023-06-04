@@ -1,5 +1,5 @@
 
-const pwa_version = "03_numpy_grid_demo_202306031006"
+const pwa_version = "03_numpy_grid_demo_202306041650"
 const assets = ["./index.html",
     "./main.py",
     "./resources/bootstrap.css",
@@ -47,5 +47,16 @@ self.addEventListener('fetch', event => {
 
         return response;
     })());
+});
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((keyList) => {
+            return Promise.all(keyList.map((key) => {
+                if(key !== pwa_version) {
+                    return caches.delete(key);
+                }
+            }));
+        })
+    );
 });
     

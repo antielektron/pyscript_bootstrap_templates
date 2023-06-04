@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf ./dist/
+#rm -rf ./dist/
 python setup.py bdist_wheel
 
 wheel_files=( dist/*whl )

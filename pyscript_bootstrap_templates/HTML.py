@@ -68,6 +68,7 @@ class Element(object):
         self._display = self.element.style.display
         self.element.style.display = "none"
 
+
     def show(self) -> None:
         if self._display is None:
             return
@@ -209,6 +210,27 @@ class Element(object):
     
     def write(self, object):
         self.element.write(self.id, object) # type: ignore
+    
+    def set_style(self, property_name: str, value: str) -> None:
+        """Set a CSS style property on this element."""
+        setattr(self._element.style, property_name, value)
+
+    def get_style(self, property_name: str) -> str:
+        """Get the value of a CSS style property on this element."""
+        try:
+            return getattr(self._element.style, property_name)
+        except AttributeError:
+            return None
+
+    def remove_style(self, property_name: str) -> None:
+        """Remove a CSS style property from this element."""
+        setattr(self._element.style, property_name, None)
+    
+    def set_styles(self, **styles) -> None:
+        """Set multiple CSS style properties on this element."""
+        for property_name, value in styles.items():
+            self.set_style(property_name, value)
+
 
 
 class A(Element):
