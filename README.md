@@ -15,7 +15,7 @@ To do this, it uses [pyscript](https://pyscript.net/) and builds python wrapper 
 ## installation
 
 ```bash
-pip install git+https://the-cake-is-a-lie.net/gogs/jonas/pyscript-bootstrap-templates.git
+pip install git+https://github.com/antielektron/pyscript_bootstrap_templates.git
 ```
 
 ## usage
