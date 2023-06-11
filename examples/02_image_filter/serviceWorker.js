@@ -1,5 +1,5 @@
 
-const pwa_version = "02_image_filter_202306041650"
+const pwa_version = "02_image_filter_202306111641"
 const assets = ["./index.html",
     "./main.py",
     "./resources/bootstrap.css",

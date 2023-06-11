@@ -1,5 +1,5 @@
 
-const pwa_version = "01_hello_world_202306041650"
+const pwa_version = "01_hello_world_202306111641"
 const assets = ["./index.html",
     "./main.py",
     "./resources/bootstrap.css",

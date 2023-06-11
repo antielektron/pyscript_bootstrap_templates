@@ -3,7 +3,7 @@
     "title": "02_image_filter",
     "packages": [
         "numpy",
-        "scikit-image"
+        "opencv-python"
     ],
     "paths": null,
     "pyscript_css_url": "https://pyscript.net/latest/pyscript.css",
