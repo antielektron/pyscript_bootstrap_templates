@@ -8,7 +8,7 @@ To do this, it uses [pyscript](https://pyscript.net/) and builds python wrapper 
 
 * examples (Code is in [examples](./examples/)):
     * [Hello World](https://antielektron.github.io/pyscript_bootstrap_templates/examples/01_hello_world)
-    * [scikit-image sobel filter](https://antielektron.github.io/pyscript_bootstrap_templates/examples/02_image_filter)
+    * [opencv image filter](https://antielektron.github.io/pyscript_bootstrap_templates/examples/02_image_filter)
     * [numpy grid demo](https://antielektron.github.io/pyscript_bootstrap_templates/examples/03_numpy_grid_demo)
     * [cell colony detector using opencv](https://antielektron.github.io/pyscript_bootstrap_templates/examples/04_cell_detector)
 
